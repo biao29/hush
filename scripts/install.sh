@@ -79,9 +79,9 @@ curl -fsSL "$CHECKSUMS_URL" -o "${TMPDIR}/checksums.txt"
 info "Verifying checksum..."
 cd "$TMPDIR"
 if command -v sha256sum >/dev/null 2>&1; then
-    grep "${ARCHIVE}" checksums.txt | sha256sum -c --quiet -
+    grep "  ${ARCHIVE}$" checksums.txt | sha256sum -c --quiet -
 else
-    EXPECTED=$(grep "${ARCHIVE}" checksums.txt | awk '{print $1}')
+    EXPECTED=$(grep "  ${ARCHIVE}$" checksums.txt | awk '{print $1}')
     ACTUAL=$(shasum -a 256 "${ARCHIVE}" | awk '{print $1}')
     [ "$EXPECTED" = "$ACTUAL" ] || error "Checksum mismatch: expected ${EXPECTED}, got ${ACTUAL}"
 fi
