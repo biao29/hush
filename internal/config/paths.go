@@ -42,3 +42,9 @@ func ProjectDir(id string) string {
 func StateFile() string {
 	return filepath.Join(HomeDir(), "state.json")
 }
+
+// IsInitialized returns true if the private repo has been cloned.
+func IsInitialized() bool {
+	_, err := os.Stat(RepoDir())
+	return err == nil
+}

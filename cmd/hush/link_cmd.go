@@ -20,6 +20,11 @@ func newLinkCmd() *cobra.Command {
 		Short: "Register current directory as a managed project",
 		Long:  "Detects git remote, generates a project ID, and sets up AGENTS.md, CLAUDE.md, and .gitignore.",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if err := requireInit(); err != nil {
+				printer.PrintError(err.Error())
+				return err
+			}
+
 			cwd, err := os.Getwd()
 			if err != nil {
 				return fmt.Errorf("get working directory: %w", err)

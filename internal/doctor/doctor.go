@@ -48,6 +48,11 @@ func checkRepoDir() Check {
 func checkConfig() []Check {
 	var checks []Check
 
+	if !config.IsInitialized() {
+		// Don't try to load config if repo doesn't exist — already reported by checkRepoDir.
+		return checks
+	}
+
 	cfg, err := config.Load()
 	if err != nil {
 		checks = append(checks, Check{Name: "hush.yaml", Status: "fail", Detail: err.Error()})

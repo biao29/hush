@@ -21,6 +21,11 @@ func newEditCmd() *cobra.Command {
 		Long:  "Opens AGENTS.override.md (or AGENTS.md with --public) in $EDITOR. Auto-resolves project from CWD or name.",
 		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if err := requireInit(); err != nil {
+				printer.PrintError(err.Error())
+				return err
+			}
+
 			cfg, err := config.Load()
 			if err != nil {
 				printer.PrintError(fmt.Sprintf("load config: %v", err))

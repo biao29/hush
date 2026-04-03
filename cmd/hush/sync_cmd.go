@@ -18,11 +18,12 @@ func newSyncCmd() *cobra.Command {
 		Long:  "Pulls the private repo and distributes AGENTS.override.md to registered project directories.",
 		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			repoDir := config.RepoDir()
-			if _, err := os.Stat(repoDir); err != nil {
-				printer.PrintError("not initialized — run 'hush init <repo-url>' first")
-				return fmt.Errorf("not initialized")
+			if err := requireInit(); err != nil {
+				printer.PrintError(err.Error())
+				return err
 			}
+
+			repoDir := config.RepoDir()
 
 			// Pull latest.
 			printer.Debug("pulling private repo")

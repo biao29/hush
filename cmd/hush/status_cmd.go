@@ -15,6 +15,11 @@ func newStatusCmd() *cobra.Command {
 		Use:   "status",
 		Short: "Show sync status for all projects",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if err := requireInit(); err != nil {
+				printer.PrintError(err.Error())
+				return err
+			}
+
 			cfg, err := config.Load()
 			if err != nil {
 				printer.PrintError(fmt.Sprintf("load config: %v", err))

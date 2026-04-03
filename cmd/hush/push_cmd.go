@@ -19,12 +19,12 @@ func newPushCmd() *cobra.Command {
 		Long:  "Copies AGENTS.override.md from project directories to the private repo, commits, and pushes.",
 		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			repoDir := config.RepoDir()
-			if _, err := os.Stat(repoDir); err != nil {
-				printer.PrintError("not initialized — run 'hush init <repo-url>' first")
-				return fmt.Errorf("not initialized")
+			if err := requireInit(); err != nil {
+				printer.PrintError(err.Error())
+				return err
 			}
 
+			repoDir := config.RepoDir()
 			cfg, err := config.Load()
 			if err != nil {
 				printer.PrintError(fmt.Sprintf("load config: %v", err))

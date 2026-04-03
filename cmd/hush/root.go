@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+
+	"github.com/getctx/hush/internal/config"
 	"github.com/getctx/hush/internal/output"
 	"github.com/spf13/cobra"
 )
@@ -49,4 +52,12 @@ func newRootCmd(version string) *cobra.Command {
 	)
 
 	return cmd
+}
+
+// requireInit checks that hush is initialized and returns a helpful error if not.
+func requireInit() error {
+	if !config.IsInitialized() {
+		return fmt.Errorf("hush is not initialized — run 'hush init <repo-url>' first")
+	}
+	return nil
 }

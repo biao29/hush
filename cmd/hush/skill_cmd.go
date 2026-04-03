@@ -103,9 +103,14 @@ Targets:
 				printer.Info("installed to %s", expanded)
 			}
 
+			summary := fmt.Sprintf("Skill installed to %d locations", len(installed))
+			if flagDryRun {
+				summary = fmt.Sprintf("Would install to %d locations", len(locations))
+			}
+
 			printer.Print(output.Response{
 				Data:    map[string]any{"installed": installed},
-				Summary: fmt.Sprintf("Skill installed to %d locations", len(installed)),
+				Summary: summary,
 				Breadcrumbs: []output.Breadcrumb{
 					{Action: "verify", Cmd: "hush skill path", Description: "Show installed skill locations"},
 				},
