@@ -56,7 +56,9 @@ resolve_version() {
 
 need curl
 need tar
-need sha256sum || need shasum
+if ! command -v sha256sum >/dev/null 2>&1 && ! command -v shasum >/dev/null 2>&1; then
+    error "Required: sha256sum or shasum not found in PATH"
+fi
 
 OS=$(detect_os)
 ARCH=$(detect_arch)

@@ -20,10 +20,10 @@ help:
 	@echo "  make fmt         Format Go source"
 	@echo "  make fmt-check   Check formatting (CI gate)"
 	@echo "  make tidy        Tidy dependencies"
-	@echo "  make tidy-check  Verify go.mod/go.sum tidiness"
+	@echo "  make tidy-check    Verify go.mod/go.sum tidiness"
 	@echo "  make check         Full CI gate (fmt + vet + test)"
 	@echo "  make release-check Pre-release validation"
-	@echo "  make release       Tag and push a release"
+	@echo "  make release V=vX.Y.Z  Tag and push a release"
 	@echo "  make clean         Remove build artifacts"
 
 build:
@@ -65,7 +65,7 @@ tidy-check:
 
 check: fmt-check vet test-unit
 
-release-check: check
+release-check: check lint
 	@if grep -q '^replace' go.mod; then \
 		echo "ERROR: go.mod contains replace directives"; \
 		grep '^replace' go.mod; \
@@ -73,7 +73,10 @@ release-check: check
 	fi
 
 release:
-	@scripts/release.sh $(VERSION)
+ifndef V
+	$(error Usage: make release V=v0.1.0)
+endif
+	@scripts/release.sh $(V)
 
 clean:
 	rm -rf bin/
