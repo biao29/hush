@@ -1,4 +1,4 @@
-name: '@openelf/hush'
+name: '@biao29/hush'
 version: 0.1.0
 type: cli
 description: Dotfiles for AI agent rules — sync private AGENTS.override.md across projects and devices

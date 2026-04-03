@@ -37,7 +37,7 @@ func TestGenerateProjectID(t *testing.T) {
 		input string
 		want  string
 	}{
-		{"github.com/openelf/getctx.org", "openelf-getctx.org"},
+		{"github.com/acme/widgets", "acme-widgets"},
 		{"github.com/user/repo", "user-repo"},
 		{"gitlab.com/group/subgroup/repo", "subgroup-repo"},
 		{"single", "single"},

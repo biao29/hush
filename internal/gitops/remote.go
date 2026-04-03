@@ -50,7 +50,7 @@ func NormalizeURL(raw string) string {
 //
 // Examples:
 //
-//	github.com/openelf/getctx.org → openelf-getctx.org
+//	github.com/acme/widgets → acme-widgets
 //	github.com/user/repo          → user-repo
 func GenerateProjectID(normalizedURL string) string {
 	parts := strings.Split(normalizedURL, "/")

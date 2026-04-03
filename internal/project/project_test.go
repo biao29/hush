@@ -17,7 +17,7 @@ func setupGitRepo(t *testing.T) string {
 	}
 	gitops.Run(dir, "config", "user.email", "test@test.com")
 	gitops.Run(dir, "config", "user.name", "Test")
-	gitops.Run(dir, "remote", "add", "origin", "git@github.com:openelf/getctx.org.git")
+	gitops.Run(dir, "remote", "add", "origin", "git@github.com:acme/widgets.git")
 	return dir
 }
 
@@ -29,8 +29,8 @@ func TestDetect(t *testing.T) {
 		t.Fatalf("Detect: %v", err)
 	}
 
-	if det.Remote != "github.com/openelf/getctx.org" {
-		t.Errorf("Remote = %q, want %q", det.Remote, "github.com/openelf/getctx.org")
+	if det.Remote != "github.com/acme/widgets" {
+		t.Errorf("Remote = %q, want %q", det.Remote, "github.com/acme/widgets")
 	}
 	if det.Subdir != "" {
 		t.Errorf("Subdir = %q, want empty", det.Subdir)
