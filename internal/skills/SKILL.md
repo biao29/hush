@@ -39,6 +39,8 @@ Sync private `AGENTS.override.md` files across projects and devices via a person
 | `hush status` | Show all project sync status |
 | `hush doctor` | Diagnose configuration issues |
 | `hush hook install` | Ensure .gitignore is set up |
+| `hush skill install` | Install agent skill |
+| `hush version` | Print version |
 
 ## How It Works
 

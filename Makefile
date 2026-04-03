@@ -1,4 +1,5 @@
-.PHONY: build test test-unit test-race lint vet fmt fmt-check tidy tidy-check check clean help tools
+.PHONY: build test test-unit test-race lint vet fmt fmt-check tidy tidy-check \
+	check release-check release clean help tools
 
 BINARY := $(CURDIR)/bin/hush
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
@@ -20,8 +21,10 @@ help:
 	@echo "  make fmt-check   Check formatting (CI gate)"
 	@echo "  make tidy        Tidy dependencies"
 	@echo "  make tidy-check  Verify go.mod/go.sum tidiness"
-	@echo "  make check       Full CI gate (fmt + vet + test)"
-	@echo "  make clean       Remove build artifacts"
+	@echo "  make check         Full CI gate (fmt + vet + test)"
+	@echo "  make release-check Pre-release validation"
+	@echo "  make release       Tag and push a release"
+	@echo "  make clean         Remove build artifacts"
 
 build:
 	@mkdir -p bin
@@ -61,6 +64,16 @@ tidy-check:
 	@mv go.mod.bak go.mod && mv go.sum.bak go.sum
 
 check: fmt-check vet test-unit
+
+release-check: check
+	@if grep -q '^replace' go.mod; then \
+		echo "ERROR: go.mod contains replace directives"; \
+		grep '^replace' go.mod; \
+		exit 1; \
+	fi
+
+release:
+	@scripts/release.sh $(VERSION)
 
 clean:
 	rm -rf bin/

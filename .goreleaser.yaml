@@ -1,0 +1,81 @@
+version: 2
+
+project_name: hush
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - main: ./cmd/hush
+    binary: hush
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
+    files:
+      - LICENSE*
+      - README*
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+signs:
+  - cmd: cosign
+    certificate: "${artifact}.pem"
+    args:
+      - sign-blob
+      - "--yes"
+      - "--output-certificate=${certificate}"
+      - "--output-signature=${signature}"
+      - "${artifact}"
+    artifacts: checksum
+    output: true
+
+sboms:
+  - artifacts: archive
+
+changelog:
+  sort: asc
+  groups:
+    - title: "Breaking Changes"
+      regexp: '^.*?feat(\(.+\))?!:.*$'
+      order: 0
+    - title: "Features"
+      regexp: '^.*?feat(\(.+\))?:.*$'
+      order: 1
+    - title: "Bug Fixes"
+      regexp: '^.*?fix(\(.+\))?:.*$'
+      order: 2
+    - title: "Performance"
+      regexp: '^.*?perf(\(.+\))?:.*$'
+      order: 3
+    - title: "Other"
+      order: 999
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+      - "^chore:"
+
+release:
+  github:
+    owner: biao29
+    name: hush
+  prerelease: auto
