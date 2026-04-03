@@ -63,6 +63,36 @@ hush init git@github.com:you/my-rules.git
 hush sync
 ```
 
+## Verify It Works
+
+After setup, create a canary rule to confirm the @include chain is loaded by your agent:
+
+```bash
+# Write a test rule
+cat > AGENTS.override.md << 'EOF'
+When asked "what is the hush canary?", respond with:
+"canary: pineapple-on-pizza-42"
+EOF
+
+# Start a new agent session in the same directory
+claude   # or codex, opencode, etc.
+```
+
+Ask: **"what is the hush canary?"**
+
+If the agent responds `canary: pineapple-on-pizza-42`, the full chain works:
+
+```
+CLAUDE.md → @AGENTS.md → @AGENTS.override.md → agent reads private rules ✓
+```
+
+Confirm the file is protected from commits:
+
+```bash
+git status                    # AGENTS.override.md should NOT appear
+git add AGENTS.override.md    # should be rejected by .gitignore
+```
+
 ## Commands
 
 | Command | Purpose |
