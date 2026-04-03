@@ -1,0 +1,10 @@
+name: '@openelf/hush'
+version: 0.1.0
+type: cli
+description: Dotfiles for AI agent rules — sync private AGENTS.override.md across projects and devices
+skill:
+  entry: internal/skills/SKILL.md
+  origin: native
+cli:
+  binary: hush
+  verify: hush version
